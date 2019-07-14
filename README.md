@@ -4,7 +4,8 @@ quakes
 ======
 
 <!-- badges: start -->
-<!-- badges: end -->
+[![Travis build status](https://travis-ci.org/bzunar/quakes.svg?branch=master)](https://travis-ci.org/bzunar/quakes) <!-- badges: end -->
+
 The goal of quakes is to explore and visualise data set of significant earthquakes which was compiled by the U.S. National Oceanographic and Atmospheric Administration (NOAA). For more information and examples, see the vignette.
 
 Installation
