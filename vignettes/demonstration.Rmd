@@ -1,0 +1,80 @@
+---
+title: "Intro to the 'quakes' Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{demonstration}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+wd <- dirname(system.file("extdata", "signif.txt.bz2", package = "quakes"))
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+knitr::opts_knit$set(root.dir = wd)
+```
+
+## The Goal
+
+This package helps to visualise occurence of earthquakes over the last 4,000 years. It uses the data set compiled by the U.S. National Oceanographic and Atmospheric Administration (NOAA) which contains information on 6,000 significant earthquakes.
+
+
+## Data Wrangling
+
+The function `eq_clean_data()` takes the NOAA data set and returns a clean data frame. It is the first function that the user should call when starting to work with the 'quakes' package. This function is often used together with `eq_location_clean()` which formats the `LOCATION_NAME` column so that that this column can be used for convenient plot annotation.
+
+```{r eq_clean_data, message = FALSE}
+library(quakes)
+
+library(dplyr)
+library(ggplot2)
+library(magrittr)
+library(readr)
+
+system.file("extdata", "signif.txt.bz2", package = "quakes") %>%
+    readr::read_delim(delim = "\t", guess_max = 10000) %>%
+    quakes::eq_clean_data() %>%
+    quakes::eq_location_clean() %>%
+    head(5)
+```
+
+
+## Plotting Timelines
+
+The package also features two ggplot2 geoms that plot timelines of the earthquakes. The `geom_timeline` plots each earthquake as one point that can be further customized through the aesthetics: color, size, and transparency. The `geom_timeline_label` adds text to each point drawn by the `geom_timeline`, e.g. it shows location name. To prevent overplotting, the user can specify the number of labels that will be shown. In this case, only the strongest earthquakes will be labelled.
+
+```{r geoms, out.width = "100%", fig.asp = 1, fig.align = 'center', dpi = 300}
+utils::data(usa_japan)
+
+usa_japan %>%
+    quakes::eq_location_clean() %>%
+    ggplot2::ggplot(ggplot2::aes(x = DATE, y = COUNTRY, label = LOCATION_NAME)) +
+    ggplot2::theme_classic() +
+    ggplot2::theme(legend.position = "right",
+                   text = element_text(size = 5)) +
+    ggplot2::labs(colour = "Deaths", size = "Magnitude") +
+    quakes::geom_timeline(ggplot2::aes(colour = base::as.numeric(DEATHS),
+                                      size = base::as.numeric(EQ_PRIMARY))) +
+    quakes::geom_timeline_label(n_max = 8, size = 1.75)
+
+```
+
+
+## Drawing Maps
+
+The package also contains dedicated function for ploting the epicentres of the eathquakes on the interactive world map,  the `eq_map` function. This function also takes as an argument a column with additional annotation data thta are shown after the user clicks on the location of the earthquake. To make the map more interesting, the user can also use specialised function `eq_create_label` to create the annotation which combines information about earthquake's location, its magnitude, and the number of deaths it caused. If any part of the information is not available, corresponding part of the label is omitted.
+
+```{r leaflet, out.width = "100%", fig.asp = 2, fig.align = 'center'}
+usa_japan %>% 
+    dplyr::mutate(popup_text = quakes::eq_create_label(.)) %>% 
+    quakes::eq_map(annot_col = "popup_text")
+
+```
+
+

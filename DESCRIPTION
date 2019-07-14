@@ -1,0 +1,32 @@
+Package: quakes
+Title: Visualise Significant Earthquakes Over The Last 4,000 Years
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Bojan",
+           family = "Zunar",
+           role = c("aut", "cre"),
+           email = "bojan.zunar@gmail.com",
+           comment = c(ORCID = ""))
+Description: This package helps to visualise occurence of earthquakes over the last 4,000 years. It uses the data set compiled by the U.S. National Oceanographic and Atmospheric Administration (NOAA) which contains information on 6,000 significant earthquakes.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    dplyr,
+    lubridate,
+    magrittr,
+    stringr,
+    ggplot2,
+    grid,
+    scales,
+    leaflet,
+    readr,
+    rlang
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 2.1.0)
+VignetteBuilder: knitr
+Depends: R (>= 2.10)
