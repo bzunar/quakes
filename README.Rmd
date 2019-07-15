@@ -25,7 +25,7 @@ The goal of quakes is to explore and visualise data set of significant earthquak
 You can install the released version of quakes from [GitHub](https://github.com/) with:
 
 ``` r
-devtools::install_github("bzunar/quakes")
+devtools::install_github("bzunar/quakes", build_vignettes = TRUE)
 ```
 
 
