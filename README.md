@@ -14,5 +14,5 @@ Installation
 You can install the released version of quakes from [GitHub](https://github.com/) with:
 
 ``` r
-devtools::install_github("bzunar/quakes")
+devtools::install_github("bzunar/quakes", build_vignettes = TRUE)
 ```
